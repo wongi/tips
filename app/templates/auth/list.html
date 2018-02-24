@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="table-responsive">
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>未完成事项</th>
+      <th>创建时间</th>
+      <th>状态</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for list in lists %}
+    <tr class="{% if list.status_id==1 %}success{% elif list.status_id==2%}danger{% endif %}">
+      <td>{{ list.id }}</td>
+      <td>{{ list.content }}</td>
+      <td class="text-nowrap">{{ list.create_time }}</td>
+      <td class="text-nowrap">
+        <span>
+        {% if list.status_id==1 %}
+          <a href="{{ url_for('auth.edit_list',list_id=list.id) }}">{{ list.status.status_name }}</a>
+        {% else %}
+          {{ list.status.status_name }}
+        {% endif %}
+        </span>
+        <span><a href="{{ url_for('auth.delete_list',list_id=list.id) }}">删除</a></span>
+        {% if list.status_id==1 %}
+        <span><a href="{{ url_for('auth.complete',list_id=list.id) }}">完成</a></span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<a href="{{ url_for('auth.add_list') }}"><button type="button" class="btn btn-primary">Add</button></a>
+
+{% endblock %}
